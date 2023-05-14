@@ -12,10 +12,12 @@ from tqdm import tqdm
 import torch
 import torch.utils.data as data
 import torchvision.transforms as transforms
+from collections.abc import MutableMapping
+
 
 from PIL import Image
 
-datapath = 'path-to-imagenet'
+datapath = '.'
 
 trainval = 'train'
 #trainval = 'val'
@@ -61,21 +63,19 @@ class DataLoader(data.Dataset):
 
     def __len__(self):
         return len(self.names)
-    
-    def __dataset_info(self,txt_labels):
-        with open(txt_labels,'r') as f:
-            images_list = f.readlines()
-        
-        file_names = []
-        labels     = []
-        for row in images_list:
-            row = row.split(' ')
-            file_names.append(row[0])
-            labels.append(int(row[1]))
-            #if len(file_names)>128*10:
-                #break
-        
-        return file_names, labels
+
+        def __dataset_info(self, txt_labels):
+            with open(txt_labels, 'r') as f:
+                images_list = f.readlines()
+
+            file_names = []
+            labels = []
+            for row in images_list:
+                row = row.split(' ')
+                file_names.append(row[0])
+                labels.append(int(row[1]))
+
+            return file_names, labels
 
 if __name__ == "__main__":
     main()
